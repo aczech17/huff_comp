@@ -66,10 +66,11 @@ Bit get_nth_bit(const Word* word, int index)
 
 void free_word(Word* word)
 {
+    if (word == NULL)
+        return;
+
     free(word->data);
     word->data = NULL;
-    free(word);
-    word = NULL; // safety first
 }
 
 bool equals(const Word* w1, const Word* w2)

@@ -36,15 +36,16 @@ int main(int argc, char** argv)
         push_bit(codeword, argv[2][i] - '0');
     }
 
+    Word word_copy = *word;
+
     Dictionary* dict = new_dictionary();
     push_codeword(dict, word, codeword);
 
-    Word* found_codeword = get_codeword(dict, word);
+    Word* found_codeword = get_codeword(dict, &word_copy);
 
     print_word(found_codeword);
 
-    free_word(word);
-    free_word(codeword);
+    //free_word(&word_copy);
     free_dictionary(dict);
     return 0;
 }

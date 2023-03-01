@@ -13,7 +13,7 @@ typedef struct
 
 Dictionary* new_dictionary();
 Word* get_codeword(const Dictionary* dict, const Word* word);
-int push_codeword(Dictionary* dict, const Word* word, const Word* codeword);
+int push_codeword(Dictionary* dict, Word* word, Word* codeword);
 void free_dictionary(Dictionary*);
 
 #endif // HUFF_COMP_DICTIONARY
