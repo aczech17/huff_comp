@@ -1,4 +1,4 @@
-source = word.c dictionary.c main.c
+source = word.c dictionary.c tree_node.c main.c
 target = comp
 
 $(target):	$(source)
