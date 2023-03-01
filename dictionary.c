@@ -55,7 +55,7 @@ static int resize(Dictionary* dict)
     return 0;
 }
 
-int push_codeword(Dictionary* dict, const Word* word, const Word* codeword)
+int push_codeword(Dictionary* dict, Word* word, Word* codeword)
 {
     if (get_codeword(dict, word)) // it already exists in the dictionary
         return 1;
@@ -66,8 +66,15 @@ int push_codeword(Dictionary* dict, const Word* word, const Word* codeword)
             return 1;
     }
 
-    dict->words[dict->size] = *word;            // shallow copy
-    dict->codewords[dict->size] = *codeword;    // shallow copy 
+    // move
+    dict->words[dict->size] = *word;
+    dict->codewords[dict->size] = *codeword;
+
+    free(word);
+    free(codeword);
+
+    word = NULL;
+    codeword = NULL;
 
     dict->size++;
 }
@@ -77,8 +84,8 @@ void free_dictionary(Dictionary* dict)
     int i;
     for (i = 0; i < dict->size; i++)
     {
-        //free_word(&dict->words[i]);
-        //free_word(&dict->codewords[i]);
+        free_word(&dict->words[i]);
+        free_word(&dict->codewords[i]);
     }
 
     free(dict->words);
