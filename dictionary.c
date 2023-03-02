@@ -42,8 +42,8 @@ static int resize(Dictionary* dict)
 {
     int new_capacity = 2 * dict->capacity;
 
-    Word* new_words = realloc(dict->words, dict->capacity * sizeof(Word));
-    Word* new_codewords = realloc(dict->codewords, dict->capacity * sizeof(Word));
+    Word* new_words = realloc(dict->words, new_capacity * sizeof(Word));
+    Word* new_codewords = realloc(dict->codewords, new_capacity * sizeof(Word));
 
     if (new_words == NULL || new_codewords == NULL)
         return 1;

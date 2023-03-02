@@ -21,31 +21,31 @@ int main(int argc, char** argv)
         fprintf(stderr, "Zesrałem się.\n");
         return 1;
     }
-
-    Word* word = new_word();
-
-    int i;
-    for (i = 0; argv[1][i]; i++)
-    {
-        push_bit(word, argv[1][i] - '0');
-    }
-
-    Word* codeword = new_word();
-    for (i = 0; argv[2][i]; i++)
-    {
-        push_bit(codeword, argv[2][i] - '0');
-    }
-
-    Word word_copy = *word;
-
+    
     Dictionary* dict = new_dictionary();
-    push_codeword(dict, word, codeword);
+    int i, j;
+    for (i = 1; i < argc; i++)
+    {
+        char* arg = argv[i];
+        Word* word = new_word();
+        Word* codeword = new_word();
+        for (j = 0; arg[j]; j++)
+        {
+            push_bit(word, arg[j] - '0');
+            push_bit(codeword, arg[j] - '0');
+        }
+        push_codeword(dict, word, codeword);
+    }
+    
+    for (i = 0; i < dict->size; i++)
+    {
+        Word* word = &dict->words[i];
+        Word* codeword = get_codeword(dict, word);
 
-    Word* found_codeword = get_codeword(dict, &word_copy);
-
-    print_word(found_codeword);
-
-    //free_word(&word_copy);
+        print_word(word);
+        print_word(codeword);
+    }
+    
     free_dictionary(dict);
     return 0;
 }
