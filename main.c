@@ -17,16 +17,6 @@ void print_word(const Word* word)
     //printf("\n");
 }
 
-void free_tree(Tree_node* tree)
-{
-    if (tree->left)
-    {
-        free_tree(tree->left);
-        free_tree(tree->right);
-    }
-    free(tree);
-}
-
 void print_dictionary(const Dictionary* dict)
 {
     //printf("%d\n", dict->size);
@@ -135,8 +125,9 @@ int main(int argc, char** argv)
 
     print_dictionary(dict);
 
-    free_dictionary(dict);
     free_tree(root);
+    free_dictionary(dict);
+
 
 
     /*

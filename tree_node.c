@@ -27,3 +27,13 @@ Tree_node* merge_nodes(Tree_node* left, Tree_node* right)
 
     return node;
 }
+
+void free_tree(Tree_node* tree)
+{
+    if (tree->left)
+    {
+        free_tree(tree->left);
+        free_tree(tree->right);
+    }
+    free(tree);
+}
