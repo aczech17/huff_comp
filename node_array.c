@@ -49,3 +49,16 @@ void increment_word(Node_array* node_array, Word* word)
     }
     add_word(node_array, word);
 }
+
+void sort_array(Node_array* node_array){
+    Tree_node* temp = NULL;
+    for(int i = 0; i< node_array->size - 1; i++)
+        for(int j = 0;j< node_array->size - i - 1;j++)
+            if(node_array->arr[j]->frequency > node_array->arr[j+ 1]->frequency){
+                temp = node_array->arr[j];
+                node_array ->arr[j] = node_array ->arr[j+1];
+                node_array->arr[j+1] = temp;
+
+            }
+                
+}
