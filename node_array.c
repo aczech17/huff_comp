@@ -50,11 +50,14 @@ void increment_word(Node_array* node_array, Word* word)
     add_word(node_array, word);
 }
 
-void sort_array(Node_array* node_array){
+void sort_array(Node_array* node_array)
+{
     Tree_node* temp = NULL;
     for(int i = 0; i< node_array->size - 1; i++)
         for(int j = 0;j< node_array->size - i - 1;j++)
-            if(node_array->arr[j]->frequency > node_array->arr[j+ 1]->frequency){
+            if(node_array->arr[j]->frequency > node_array->arr[j + 1]->frequency || node_array->arr[j] == NULL)
+            // NULLs must go on the end
+            {
                 temp = node_array->arr[j];
                 node_array ->arr[j] = node_array ->arr[j+1];
                 node_array->arr[j+1] = temp;
@@ -68,8 +71,15 @@ void merge_2_nodes(Node_array* node_array)
     Tree_node* right = node_array->arr[1];
 
     Tree_node* parent = merge_nodes(left, right);
+    node_array->arr[0] = parent;
+    node_array->arr[1] = node_array->arr[node_array->size - 1];
+    node_array->arr[node_array->size - 1] = NULL;
 
-    node_array->arr[1] = parent;
-    node_array->arr = &node_array->arr[1];
     node_array->size--;
+}
+
+void free_node_array(Node_array* node_array)
+{
+    free(node_array->arr);
+    //free(node_array);
 }
