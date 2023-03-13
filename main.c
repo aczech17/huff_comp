@@ -28,6 +28,19 @@ void traverse(Tree_node* root)
     printf(" %d\n", root->frequency);
 }
 
+void print_dictionary(const Dictionary* dict)
+{
+    //printf("%d\n", dict->size);
+    int i;
+    for (i = 0; i < dict->size; i++)
+    {
+        print_word(&dict->words[i]);
+        printf(" ");
+        print_word(&dict->codewords[i]);
+        printf("\n");
+    }
+}
+
 int main(int argc, char** argv)
 {
 
@@ -117,7 +130,10 @@ int main(int argc, char** argv)
 
     Tree_node* root = node_array->arr[0];
     
-    traverse(root);
+    Dictionary* dict = new_dictionary();
+    fill_dictionary(dict, root);
+
+    print_dictionary(dict);
 
     /*
     if (argc < 3)

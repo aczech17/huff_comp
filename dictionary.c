@@ -79,6 +79,35 @@ int push_codeword(Dictionary* dict, Word* word, Word* codeword)
     dict->size++;
 }
 
+static void traverse_tree(Dictionary* dict, Tree_node* tree, Word* current_word)
+{
+    if (tree->left)
+    {
+        push_bit(current_word, 0);
+        traverse_tree(dict, tree->left, current_word);
+
+
+        pop_bit(current_word);
+        push_bit(current_word, 1);
+
+        traverse_tree(dict, tree->right, current_word);
+        pop_bit(current_word);
+    }
+    else // leaf
+    {
+        Word* word = tree->word;
+        Word* codeword = copy_word(current_word);
+        push_codeword(dict, word, codeword);
+    }
+    
+}
+
+void fill_dictionary(Dictionary* dictionary, Tree_node* tree)
+{
+    Word* current_word = new_word();
+    traverse_tree(dictionary, tree, current_word);
+}
+
 void free_dictionary(Dictionary* dict)
 {
     int i;

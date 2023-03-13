@@ -1,6 +1,12 @@
 #include "word.h"
 #include <stdlib.h>
 
+/*
+    char* data;
+    int size;
+    int capacity;
+*/
+
 static int resize(Word* word)
 {
     int new_capacity = 2 * word->capacity;
@@ -55,6 +61,11 @@ int push_bit(Word* word, Bit bit)
     return 0;
 }
 
+int pop_bit(Word* word)
+{
+    if (word->size > 0)
+        word->size--;}
+
 Bit get_nth_bit(const Word* word, int index)
 {
     int byte_index = index / 8;
@@ -89,4 +100,14 @@ bool equals(const Word* w1, const Word* w2)
     }
 
     return true;
+}
+
+Word* copy_word(Word* word)
+{
+    Word* copy = new_word();
+    int i;
+    for (i = 0; i < word->size; i++)
+        push_bit(copy, get_nth_bit(word, i));
+
+    return copy;
 }

@@ -2,6 +2,7 @@
 #define HUFF_COMP_DICTIONARY
 
 #include "word.h"
+#include "tree_node.h"
 
 typedef struct
 {
@@ -14,6 +15,7 @@ typedef struct
 Dictionary* new_dictionary();
 Word* get_codeword(const Dictionary* dict, const Word* word);
 int push_codeword(Dictionary* dict, Word* word, Word* codeword);
+void fill_dictionary(Dictionary* dictionary, Tree_node* tree);
 void free_dictionary(Dictionary*);
 
 #endif // HUFF_COMP_DICTIONARY
