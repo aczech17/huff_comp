@@ -24,7 +24,7 @@ int main(int argc, char** argv)
 
     while (mamy kolejne słowo word)
     {
-        increment_word(tree, word);
+        increment_word(&tree, word);
     }
 */
 

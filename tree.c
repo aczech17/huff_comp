@@ -11,8 +11,8 @@ void increment_word(Tree_node** list, Word* word)
         return;
     }
 
-    Tree_node* i = *list;
-    for (; i->right; i = i->right)
+    Tree_node* i;
+    for (i = *list; i->right; i = i->right)
     {
         if (equals(i->word, word))
         {
