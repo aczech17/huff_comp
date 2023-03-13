@@ -2,6 +2,7 @@
 #include <string.h>
 #include "word.h"
 #include "dictionary.h"
+#include "tree_node.h"
 
 void print_word(const Word* word)
 {
@@ -16,6 +17,19 @@ void print_word(const Word* word)
 
 int main(int argc, char** argv)
 {
+
+/*
+    Tree_node* tree = NULL;
+    
+
+    while (mamy kolejne słowo word)
+    {
+        increment_word(tree, word);
+    }
+*/
+
+
+
     if (argc < 3)
     {
         fprintf(stderr, "Zesrałem się.\n");
