@@ -3,6 +3,7 @@
 #include "word.h"
 #include "dictionary.h"
 #include "tree_node.h"
+#include "node_array.h"
 
 void print_word(const Word* word)
 {
@@ -12,7 +13,19 @@ void print_word(const Word* word)
         Bit bit = get_nth_bit(word, i);
         printf("%d", bit);
     }
-    printf("\n");
+    //printf("\n");
+}
+
+void traverse(Tree_node* root)
+{
+    if (root->left)
+        traverse(root->left);
+    if (root->right)
+        traverse(root->right);
+
+    if (root->word)
+        print_word(root->word);
+    printf(" %d\n", root->frequency);
 }
 
 int main(int argc, char** argv)
@@ -28,8 +41,85 @@ int main(int argc, char** argv)
     }
 */
 
+    /*
+    A - 65 01000001
+    B - 66 01000010
+    C - 67 01000011
+    D - 68 01000100 
+    */
+
+    Word* A = new_word();
+    push_bit(A, 0);
+    push_bit(A, 1);
+    push_bit(A, 0);
+    push_bit(A, 0);
+    push_bit(A, 0);
+    push_bit(A, 0);
+    push_bit(A, 0);
+    push_bit(A, 1);
+
+    Word* B = new_word();
+    push_bit(B, 0);
+    push_bit(B, 1);
+    push_bit(B, 0);
+    push_bit(B, 0);
+    push_bit(B, 0);
+    push_bit(B, 0);
+    push_bit(B, 1);
+    push_bit(B, 0);
+
+    Word* C = new_word();
+    push_bit(C, 0);
+    push_bit(C, 1);
+    push_bit(C, 0);
+    push_bit(C, 0);
+    push_bit(C, 0);
+    push_bit(C, 0);
+    push_bit(C, 1);
+    push_bit(C, 1);
+
+    Word* D = new_word();
+    push_bit(D, 0);
+    push_bit(D, 1);
+    push_bit(D, 0);
+    push_bit(D, 0);
+    push_bit(D, 0);
+    push_bit(D, 1);
+    push_bit(D, 0);
+    push_bit(D, 0);
+
+
+
+    Node_array* node_array = new_node_array();
+
+    increment_word(node_array, A);
+
+    increment_word(node_array, B);
+    increment_word(node_array, B);
+
+    increment_word(node_array, C);
+    increment_word(node_array, C);
+    increment_word(node_array, C);
+
+    increment_word(node_array, D);
+    increment_word(node_array, D);
+    increment_word(node_array, D);
+    increment_word(node_array, D);
 
     
+
+    while (node_array->size > 1)
+    {
+        merge_2_nodes(node_array);
+        sort_array(node_array);
+    }
+
+
+    Tree_node* root = node_array->arr[0];
+    
+    traverse(root);
+
+    /*
     if (argc < 3)
     {
         fprintf(stderr, "Zesrałem się.\n");
@@ -61,5 +151,7 @@ int main(int argc, char** argv)
     }
     
     free_dictionary(dict);
+    */
+
     return 0;
 }
