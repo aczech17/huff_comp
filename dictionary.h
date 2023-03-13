@@ -6,8 +6,8 @@
 
 typedef struct
 {
-    Word* words;
-    Word* codewords;
+    Word** words;
+    Word** codewords;
     int size;
     int capacity;
 }Dictionary;

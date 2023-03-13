@@ -2,8 +2,8 @@
 #include <stdlib.h>
 
 /*
-     Word* words;
-    Word* codewords;
+     Word** words;
+    Word** codewords;
     int size;
     int capacity;
 */
@@ -18,8 +18,8 @@ Dictionary* new_dictionary()
     dict->size = 0;
     dict->capacity = 4;
 
-    dict->words = malloc(dict->capacity * sizeof(Word));
-    dict->codewords = malloc(dict->capacity * sizeof(Word));
+    dict->words = malloc(dict->capacity * sizeof(Word*));
+    dict->codewords = malloc(dict->capacity * sizeof(Word*));
 
     return dict;
 }
@@ -29,9 +29,9 @@ Word* get_codeword(const Dictionary* dict, const Word* word)
     int i;
     for (i = 0; i < dict->size; i++)
     {
-        if (equals(&dict->words[i], word))
+        if (equals(dict->words[i], word))
         {
-            return &dict->codewords[i];
+            return dict->codewords[i];
         }
     }
 
@@ -42,8 +42,8 @@ static int resize(Dictionary* dict)
 {
     int new_capacity = 2 * dict->capacity;
 
-    Word* new_words = realloc(dict->words, new_capacity * sizeof(Word));
-    Word* new_codewords = realloc(dict->codewords, new_capacity * sizeof(Word));
+    Word** new_words = realloc(dict->words, new_capacity * sizeof(Word*));
+    Word** new_codewords = realloc(dict->codewords, new_capacity * sizeof(Word*));
 
     if (new_words == NULL || new_codewords == NULL)
         return 1;
@@ -67,14 +67,8 @@ int push_codeword(Dictionary* dict, Word* word, Word* codeword)
     }
 
     // move
-    dict->words[dict->size] = *word;
-    dict->codewords[dict->size] = *codeword;
-
-    free(word);
-    free(codeword);
-
-    word = NULL;
-    codeword = NULL;
+    dict->words[dict->size] = word;
+    dict->codewords[dict->size] = codeword;
 
     dict->size++;
 }
@@ -106,6 +100,7 @@ void fill_dictionary(Dictionary* dictionary, Tree_node* tree)
 {
     Word* current_word = new_word();
     traverse_tree(dictionary, tree, current_word);
+    free_word(current_word);
 }
 
 void free_dictionary(Dictionary* dict)
@@ -113,8 +108,8 @@ void free_dictionary(Dictionary* dict)
     int i;
     for (i = 0; i < dict->size; i++)
     {
-        free_word(&dict->words[i]);
-        free_word(&dict->codewords[i]);
+        free_word(dict->words[i]);
+        free_word(dict->codewords[i]);
     }
 
     free(dict->words);

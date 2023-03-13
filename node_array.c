@@ -56,7 +56,6 @@ void sort_array(Node_array* node_array)
     for(int i = 0; i< node_array->size - 1; i++)
         for(int j = 0;j< node_array->size - i - 1;j++)
             if(node_array->arr[j]->frequency > node_array->arr[j + 1]->frequency)
-            // NULLs must go on the end
             {
                 temp = node_array->arr[j];
                 node_array ->arr[j] = node_array ->arr[j+1];

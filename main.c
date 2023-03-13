@@ -4,6 +4,7 @@
 #include "dictionary.h"
 #include "tree_node.h"
 #include "node_array.h"
+#include <stdlib.h>
 
 void print_word(const Word* word)
 {
@@ -16,16 +17,14 @@ void print_word(const Word* word)
     //printf("\n");
 }
 
-void traverse(Tree_node* root)
+void free_tree(Tree_node* tree)
 {
-    if (root->left)
-        traverse(root->left);
-    if (root->right)
-        traverse(root->right);
-
-    if (root->word)
-        print_word(root->word);
-    printf(" %d\n", root->frequency);
+    if (tree->left)
+    {
+        free_tree(tree->left);
+        free_tree(tree->right);
+    }
+    free(tree);
 }
 
 void print_dictionary(const Dictionary* dict)
@@ -34,25 +33,15 @@ void print_dictionary(const Dictionary* dict)
     int i;
     for (i = 0; i < dict->size; i++)
     {
-        print_word(&dict->words[i]);
+        print_word(dict->words[i]);
         printf(" ");
-        print_word(&dict->codewords[i]);
+        print_word(dict->codewords[i]);
         printf("\n");
     }
 }
 
 int main(int argc, char** argv)
 {
-
-/*
-    Tree_node* tree = NULL;
-    
-
-    while (mamy kolejne słowo word)
-    {
-        increment_word(&tree, word);
-    }
-*/
 
     /*
     A - 65 01000001
@@ -102,7 +91,6 @@ int main(int argc, char** argv)
     push_bit(D, 0);
 
 
-
     Node_array* node_array = new_node_array();
 
     increment_word(node_array, A);
@@ -129,11 +117,27 @@ int main(int argc, char** argv)
 
 
     Tree_node* root = node_array->arr[0];
+    free_node_array(node_array);
+
+    /*
+    free_tree(root);
+
+    free_word(A);
+    free_word(B);
+    free_word(C);
+    free_word(D);
+    return 0;
+    */
+
     
     Dictionary* dict = new_dictionary();
     fill_dictionary(dict, root);
 
     print_dictionary(dict);
+
+    free_dictionary(dict);
+    free_tree(root);
+
 
     /*
     if (argc < 3)
