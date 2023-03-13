@@ -59,6 +59,17 @@ void sort_array(Node_array* node_array){
                 node_array ->arr[j] = node_array ->arr[j+1];
                 node_array->arr[j+1] = temp;
 
-            }
-                
+            }      
+}
+
+void merge_2_nodes(Node_array* node_array)
+{
+    Tree_node* left = node_array->arr[0];
+    Tree_node* right = node_array->arr[1];
+
+    Tree_node* parent = merge_nodes(left, right);
+
+    node_array->arr[1] = parent;
+    node_array->arr = &node_array->arr[1];
+    node_array->size--;
 }
