@@ -2,11 +2,9 @@
 #include <string.h>
 #include "word.h"
 #include "dictionary.h"
-#include "tree_node.h"
-#include "node_array.h"
 #include <stdlib.h>
-#include <stdbool.h>
 #include "word_reader.h"
+#include "compress.h"
 
 void print_word(const Word* word)
 {
@@ -32,47 +30,64 @@ void print_dictionary(const Dictionary* dict)
     }
 }
 
+/*
+ ./comp test12 -O1
+01000011 0
+01000001 10
+01000010 11
+*/
+
+
 int main(int argc, char** argv)
 {
-    Word_reader* reader = open_file(argv[1], 12);
-    Node_array* node_array = new_node_array();
-
-    Word* word;
-    while (true)
+    const char* usage = "comp [input filename] [compress rate (-O1 | -O2 | -O3)]";
+    if (argc < 3)
     {
-        word = get_word(reader);
-        if (word->size != 0)
-            increment_word(node_array, word);
-        else
-        {
-            free_word(word);
-            break;
-        }
-
-        free_word(word);
-    }
-    
-    while (node_array->size > 1)
-    {
-        merge_2_nodes(node_array);
-        sort_array(node_array);
+        fprintf(stderr, "%s\n", usage);
+        return 1;
     }
 
+    int word_size;
+    if (strcmp(argv[2], "-O1") == 0)
+        word_size = 8;
+    else if (strcmp(argv[2], "-O2") == 0)
+        word_size = 12;
+    else if (strcmp(argv[2], "-O3") == 0)
+        word_size = 16;
+    else
+    {
+        fprintf(stderr, "Bad argument\n");
+        return 2;
+    }
 
-    Tree_node* root = node_array->arr[0];
-    free_node_array(node_array);
+    Word_reader* reader = open_file(argv[1], word_size);
+    if (reader == NULL)
+    {
+        fprintf(stderr, "Nie udało się otworzyć pliku.\n");
+        return 3;
+    }
 
-    
-    Dictionary* dict = new_dictionary();
-    fill_dictionary(dict, root);
-
-    print_dictionary(dict);
-
-    free_tree(root);
-    free_dictionary(dict);
-
-
-
+    Dictionary* dict = get_dictionary(reader);
     close_file(reader);
+
+
+
+    Word* A = new_word(); // 01000001
+    push_bit(A, 0);
+    push_bit(A, 1);
+    push_bit(A, 0);
+    push_bit(A, 0);
+    push_bit(A, 0);
+    push_bit(A, 0);
+    push_bit(A, 0);
+    push_bit(A, 1);
+
+    Word* c = get_codeword(dict, A);
+
+    print_word(c);
+
+    free_word(A);
+    
+    free_dictionary(dict);
     return 0;
 }
