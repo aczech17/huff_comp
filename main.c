@@ -6,6 +6,7 @@
 #include "node_array.h"
 #include <stdlib.h>
 #include <stdbool.h>
+#include "word_reader.h"
 
 void print_word(const Word* word)
 {
@@ -33,16 +34,10 @@ void print_dictionary(const Dictionary* dict)
 
 int main(int argc, char** argv)
 {
-    FILE* in = argc > 1 ? fopen(argv[1], "rb") : stdin;
+    Word_reader* reader = open_file(argv[1], 8);
     Node_array* node_array = new_node_array();
 
-    char byte;
-    while(fread(&byte, 1, 1, in))
-    {
-        Word* word = new_word();
-        increment_word(node_array, word);
-        free_word(word);
-    }
+    
 
     
 

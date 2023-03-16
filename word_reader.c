@@ -18,7 +18,7 @@ Word_reader* open_file(const char* filename, int word_size)
     return word_reader;
 }
 
-size_t load_next_byte(Word_reader* word_reader)
+static size_t load_next_byte(Word_reader* word_reader)
 {
     return fread(&word_reader->latest_byte, 1, 1, word_reader->file);
 }
