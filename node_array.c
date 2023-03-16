@@ -24,7 +24,7 @@ Node_array* new_node_array()
 static void resize(Node_array* node_array)
 {
     int new_capacity = node_array->capacity * 2;
-    node_array->arr = realloc(node_array->arr, new_capacity);
+    node_array->arr = realloc(node_array->arr, new_capacity * sizeof(Tree_node*));
     node_array->capacity = new_capacity;
 }
 
