@@ -82,7 +82,6 @@ void free_word(Word* word)
 
     free(word->data);
     free(word);
-    word = NULL;
 }
 
 bool equals(const Word* w1, const Word* w2)
