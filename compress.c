@@ -1,7 +1,8 @@
 #include "compress.h"
 #include "node_array.h"
+#include "dictionary.h"
 
-Dictionary* get_dictionary(Word_reader* reader)
+static Dictionary* get_dictionary(Word_reader* reader)
 {
     Node_array* node_array = new_node_array();
 
@@ -35,4 +36,51 @@ Dictionary* get_dictionary(Word_reader* reader)
     fill_dictionary(dict, root);
     free_tree(root);
     return dict;
+}
+
+static void print_word(const Word* word)
+{
+    int i;
+    for (i = 0; i < word->size; i++)
+    {
+        Bit bit = get_nth_bit(word, i);
+        printf("%d", bit);
+    }
+    //printf("\n");
+}
+
+static void print_dictionary(const Dictionary* dict)
+{
+    //printf("%d\n", dict->size);
+    int i;
+    for (i = 0; i < dict->size; i++)
+    {
+        print_word(dict->words[i]);
+        printf(" ");
+        print_word(dict->codewords[i]);
+        printf("\n");
+    }
+}
+
+/*
+    error codes:
+    0 - OK
+    1 - could not open the file
+    2 - could not create the new file
+    555 - other
+*/
+
+int compress_file(const char* input_filename, const char* output_filename, int word_size)
+{
+    Word_reader* reader = open_file(input_filename, word_size);
+    if (reader == NULL)
+        return 1;
+
+    Dictionary* dict = get_dictionary(reader);
+    close_file(reader);
+
+    print_dictionary(dict);
+
+    free_dictionary(dict);
+    return 0;
 }
