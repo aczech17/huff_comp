@@ -106,14 +106,10 @@ Word* copy_word(Word* word)
 {
     Word* copy = new_word();
 
-    int bytes_count = (word->size + 7) / 8;
 
     int i;
-    for (i = 0; i < bytes_count; i++)
-        copy->data[i] = word->data[i];
+    for (i = 0; i < word->size; i++)
+        push_bit(copy, get_nth_bit(word, i));
 
-
-    copy->capacity = word->capacity;
-    copy->size = word->size;
     return copy;
 }
