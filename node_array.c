@@ -32,7 +32,7 @@ static void add_word(Node_array* node_array, Word* word)
 {
     if (node_array->size == node_array->capacity)
         resize(node_array);
-    Tree_node* node = new_node(word, 1);
+    Tree_node* node = new_node(copy_word(word), 1); // node array is an owner of the new word copy
     node_array->arr[node_array->size++] = node;
 }
 

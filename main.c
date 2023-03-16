@@ -98,6 +98,10 @@ int main(int argc, char** argv)
     increment_word(node_array, D);
 
     
+    free_word(A);
+    free_word(B);
+    free_word(C);
+    free_word(D);
 
     while (node_array->size > 1)
     {
@@ -108,16 +112,6 @@ int main(int argc, char** argv)
 
     Tree_node* root = node_array->arr[0];
     free_node_array(node_array);
-
-    /*
-    free_tree(root);
-
-    free_word(A);
-    free_word(B);
-    free_word(C);
-    free_word(D);
-    return 0;
-    */
 
     
     Dictionary* dict = new_dictionary();
