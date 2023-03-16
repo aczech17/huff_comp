@@ -113,5 +113,8 @@ Word* copy_word(Word* word)
     for (i = 0; i < bytes_count; i++)
         copy->data[i] = word->data[i];
 
+
+    copy->capacity = word->capacity;
+    copy->size = word->size;
     return copy;
 }
