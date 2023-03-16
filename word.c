@@ -106,9 +106,12 @@ bool equals(const Word* w1, const Word* w2)
 Word* copy_word(Word* word)
 {
     Word* copy = new_word();
+
+    int bytes_count = (word->size + 7) / 8;
+
     int i;
-    for (i = 0; i < word->size; i++)
-        push_bit(copy, get_nth_bit(word, i));
+    for (i = 0; i < bytes_count; i++)
+        copy->data[i] = word->data[i];
 
     return copy;
 }
