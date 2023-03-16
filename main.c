@@ -25,9 +25,18 @@ int main(int argc, char** argv)
         return 2;
     }
 
-    compress_file(argv[1], argv[2], word_size);
+    int result = compress_file(argv[1], argv[2], word_size);
+    switch (result)
+    {
+        case 1:
+            fprintf(stderr, "Nie można otworzyć pliku.\n");
+            break;
+        case 2:
+            fprintf(stderr, "Nie można stworzyć pliku.\n");
+            break;
+        default:
+            break;
+    }
 
-    
-    
-    return 0;
+    return result;
 }

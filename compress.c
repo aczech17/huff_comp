@@ -11,14 +11,15 @@ static Dictionary* get_dictionary(Word_reader* reader)
     {
         word = get_word(reader);
         if (word->size != 0)
+        {
             increment_word(node_array, word);
+            free_word(word);
+        }
         else
         {
             free_word(word);
             break;
         }
-
-        free_word(word);
     }
 
     while (node_array->size > 1)
@@ -38,28 +39,29 @@ static Dictionary* get_dictionary(Word_reader* reader)
     return dict;
 }
 
-static void print_word(const Word* word)
+static void print_word(const Word* word, FILE* file)
 {
     int i;
     for (i = 0; i < word->size; i++)
     {
         Bit bit = get_nth_bit(word, i);
-        printf("%d", bit);
+        fprintf(file, "%d", bit);
     }
     //printf("\n");
 }
 
-static void print_dictionary(const Dictionary* dict)
+static void print_dictionary(const Dictionary* dict, FILE* file)
 {
     //printf("%d\n", dict->size);
     int i;
     for (i = 0; i < dict->size; i++)
     {
-        print_word(dict->words[i]);
-        printf(" ");
-        print_word(dict->codewords[i]);
-        printf("\n");
+        print_word(dict->words[i], file);
+        fprintf(file, " ");
+        print_word(dict->codewords[i], file);
+        fprintf(file, "\n");
     }
+    fprintf(file, "\n");
 }
 
 /*
@@ -79,8 +81,39 @@ int compress_file(const char* input_filename, const char* output_filename, int w
     Dictionary* dict = get_dictionary(reader);
     close_file(reader);
 
-    print_dictionary(dict);
+
+
+    FILE* output = fopen(output_filename, "wb");
+    if (output == NULL)
+        return 2;
+
+
+    reader = open_file(input_filename, word_size);
+    if (reader == NULL)
+        return 1;
+
+
+    print_dictionary(dict, output);
+    Word* word;
+
+    while (true)
+    {
+        word = get_word(reader);
+        if (word->size != 0)
+        {
+            Word* codeword = get_codeword(dict, word);
+            print_word(codeword, output);
+            free_word(word);
+        }
+        else
+        {
+            free_word(word);
+            break;
+        }
+    }
 
     free_dictionary(dict);
+    close_file(reader);
+    fclose(output);
     return 0;
 }
