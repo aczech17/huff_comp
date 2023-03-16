@@ -1,4 +1,4 @@
-source = word.c dictionary.c tree_node.c node_array.c main.c
+source = word.c dictionary.c tree_node.c node_array.c word_reader.c main.c
 target = comp
 
 $(target):	$(source)
