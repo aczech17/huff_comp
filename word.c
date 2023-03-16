@@ -35,10 +35,12 @@ Word* new_word()
         return NULL;
 
     word->size = 0;
-    word->capacity = 1;
+    word->capacity = 2;
 
     word->data = malloc(word->capacity);
-    word->data[0] = 0;
+    int i;
+    for (i = 0; i < word->capacity; i++)
+        word->data[i] = 0;
 
     return word;
 }
