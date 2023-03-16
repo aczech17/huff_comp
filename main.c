@@ -34,7 +34,7 @@ void print_dictionary(const Dictionary* dict)
 
 int main(int argc, char** argv)
 {
-    Word_reader* reader = open_file(argv[1], 8);
+    Word_reader* reader = open_file(argv[1], 12);
     Node_array* node_array = new_node_array();
 
     Word* word;

@@ -72,6 +72,7 @@ Word* get_word(Word_reader* word_reader)
                 return word;
 
             push_bits(word, word_reader->latest_byte, 4, 7);
+            word_reader->in_half_byte = true;
         }
     }
     else
