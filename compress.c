@@ -1,6 +1,8 @@
 #include "compress.h"
 #include "node_array.h"
 #include "dictionary.h"
+#include "word_reader.h"
+#include "word_writer.h"
 
 static Dictionary* get_dictionary(Word_reader* reader)
 {
@@ -79,21 +81,21 @@ int compress_file(const char* input_filename, const char* output_filename, int w
         return 1;
 
     Dictionary* dict = get_dictionary(reader);
-    close_file(reader);
+    close_reader(reader);
 
-
-
-    FILE* output = fopen(output_filename, "wb");
-    if (output == NULL)
+    Word_writer* writer = create_file(output_filename);
+    if (writer == NULL)
         return 2;
-
 
     reader = open_file(input_filename, word_size);
     if (reader == NULL)
+    {
+        close_writer(writer);
         return 1;
+    }
 
 
-    print_dictionary(dict, output);
+    print_dictionary(dict, writer->file);
     Word* word;
 
     while (true)
@@ -102,18 +104,21 @@ int compress_file(const char* input_filename, const char* output_filename, int w
         if (word->size != 0)
         {
             Word* codeword = get_codeword(dict, word);
-            print_word(codeword, output);
+            write_word(writer, codeword);
             free_word(word);
         }
         else
         {
+            if (writer->bits_filled > 0) // dump the rest
+                fwrite(&writer->latest_byte, 1, 1, writer->file);
+
             free_word(word);
             break;
         }
     }
 
     free_dictionary(dict);
-    close_file(reader);
-    fclose(output);
+    close_reader(reader);
+    close_writer(writer);
     return 0;
 }

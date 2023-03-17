@@ -15,6 +15,6 @@ typedef struct Word_reader
 
 Word_reader* open_file(const char* filename, int word_size);
 Word* get_word(Word_reader* word_reader);
-void close_file(Word_reader* word_reader);
+void close_reader(Word_reader* word_reader);
 
 #endif // HUFF_COMP_WORD_READER

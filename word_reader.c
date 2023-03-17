@@ -87,7 +87,7 @@ Word* get_word(Word_reader* word_reader)
     return word;
 }
 
-void close_file(Word_reader* word_reader)
+void close_reader(Word_reader* word_reader)
 {
     fclose(word_reader->file);
     free(word_reader);

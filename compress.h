@@ -1,7 +1,6 @@
 #ifndef HUFF_COMP_COMPRESS
 #define HUFF_COMP_COMPRESS
 
-#include "word_reader.h"
 
 /*
     error codes:
