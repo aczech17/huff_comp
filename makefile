@@ -1,4 +1,4 @@
-source = word.c dictionary.c tree_node.c node_array.c word_reader.c word_writer.c compress.c main.c
+source = src/*.c
 target = comp
 
 $(target):	$(source)
