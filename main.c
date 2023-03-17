@@ -6,7 +6,7 @@
 int main(int argc, char** argv)
 {
     const char* usage = "comp [input filename] [output filename] [compress rate (-O1 | -O2 | -O3)]";
-    if (argc < 4)
+    if (argc != 4)
     {
         fprintf(stderr, "%s\n", usage);
         return 1;
@@ -25,8 +25,8 @@ int main(int argc, char** argv)
         return 2;
     }
 
-    int result = compress_file(argv[1], argv[2], word_size);
-    switch (result)
+    int compress_result = compress_file(argv[1], argv[2], word_size);
+    switch (compress_result)
     {
         case 1:
             fprintf(stderr, "Nie można otworzyć pliku.\n");
@@ -38,5 +38,5 @@ int main(int argc, char** argv)
             break;
     }
 
-    return result;
+    return compress_result;
 }

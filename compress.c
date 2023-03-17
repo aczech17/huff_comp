@@ -66,6 +66,15 @@ static void print_dictionary(const Dictionary* dict, FILE* file)
     fprintf(file, "\n");
 }
 
+static void write_dictionary(const Dictionary* dict, Word_writer* writer)
+{
+    FILE* file = writer->file;
+    const char* signature = "CRSK";
+    fprintf(file, "%s", signature);
+    
+    print_dictionary(dict, file);
+}
+
 /*
     error codes:
     0 - OK
@@ -95,7 +104,7 @@ int compress_file(const char* input_filename, const char* output_filename, int w
     }
 
 
-    print_dictionary(dict, writer->file);
+    write_dictionary(dict, writer);
     Word* word;
 
     while (true)
