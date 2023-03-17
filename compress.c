@@ -94,7 +94,10 @@ int compress_file(const char* input_filename, const char* output_filename, int w
 
     Word_writer* writer = create_file(output_filename);
     if (writer == NULL)
+    {
+        free_dictionary(dict);
         return 2;
+    }
 
     reader = open_file(input_filename, word_size);
     if (reader == NULL)
