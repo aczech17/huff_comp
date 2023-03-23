@@ -17,5 +17,6 @@ Word* get_codeword(const Dictionary* dict, const Word* word);
 int push_codeword(Dictionary* dict, Word* word, Word* codeword);
 void fill_dictionary(Dictionary* dictionary, Tree_node* tree);
 void free_dictionary(Dictionary*);
+int get_max_codeword_length(const Dictionary*);
 
 #endif // HUFF_COMP_DICTIONARY

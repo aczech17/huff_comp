@@ -2,6 +2,7 @@
 #include <string.h>
 #include "compress.h"
 
+#include "word.h"
 
 int main(int argc, char** argv)
 {

@@ -103,6 +103,21 @@ void fill_dictionary(Dictionary* dictionary, Tree_node* tree)
     free_word(current_word);
 }
 
+int get_max_codeword_length(const Dictionary* dict)
+{
+    int max_length = 0;
+    int i;
+    for (i = 0; i < dict->size; i++)
+    {
+        if (dict->codewords[i]->size > max_length)
+        {
+            max_length = dict->codewords[i]->size;
+        }
+    }
+
+    return max_length;
+}
+
 void free_dictionary(Dictionary* dict)
 {
     int i;

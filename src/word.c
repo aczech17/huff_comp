@@ -1,6 +1,8 @@
 #include "word.h"
 #include <stdlib.h>
 
+#include <stdio.h> // DEBUG
+
 /*
     char* data;
     int size;
@@ -41,6 +43,19 @@ Word* new_word()
     int i;
     for (i = 0; i < word->capacity; i++)
         word->data[i] = 0;
+
+    return word;
+}
+
+Word* get_word_from_number(int number, int length)
+{   
+    Word* word = new_word();
+    int i;
+    for (i = length - 1; i >= 0; i--)
+    {
+        Bit bit = (number >> i) % 2 == 0 ? 0 : 1;
+        push_bit(word, bit);
+    }
 
     return word;
 }

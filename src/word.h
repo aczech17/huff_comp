@@ -19,5 +19,6 @@ Bit get_nth_bit(const Word* word, int index);
 void free_word(Word* word);
 bool equals(const Word*, const Word*);
 Word* copy_word(Word*);
+Word* get_word_from_number(int number, int length);
 
 #endif //HUFF_COMP_WORD

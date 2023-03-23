@@ -3,6 +3,7 @@
 #include "dictionary.h"
 #include "word_reader.h"
 #include "word_writer.h"
+#include "word.h"
 
 static Dictionary* get_dictionary(Word_reader* reader)
 {
@@ -66,13 +67,85 @@ static void print_dictionary(const Dictionary* dict, FILE* file)
     fprintf(file, "\n");
 }
 
+static int get_bit_count(int number)
+{
+    if (number == 0)
+        return 1;
+
+    int count = 0;
+    while (number != 0)
+    {
+        count++;
+        number /= 2;
+    }
+
+    return count;
+}
+
 static void write_dictionary(const Dictionary* dict, Word_writer* writer)
 {
     FILE* file = writer->file;
     const char* signature = "CRSK";
     fprintf(file, "%s", signature);
-    
-    print_dictionary(dict, file);
+
+    int word_length = dict->words[0]->size;
+    Word* word_length_coded = new_word();
+    switch (word_length)
+    {
+        case 8:
+        {
+            push_bit(word_length_coded, 0);
+            push_bit(word_length_coded, 0);
+            break;
+            
+        }
+        case 12:
+        {
+            push_bit(word_length_coded, 0);
+            push_bit(word_length_coded, 1);
+            break;
+        }
+        case 16:
+        {
+            push_bit(word_length_coded, 1);
+            push_bit(word_length_coded, 0);
+            break;
+        }
+        default:
+            break;
+    }
+    write_word(writer, word_length_coded);
+    free_word(word_length_coded);
+
+    int max_codeword_length = get_max_codeword_length(dict);
+    Word* max_codeword_length_coded = get_word_from_number(max_codeword_length, word_length);
+    write_word(writer, max_codeword_length_coded);
+    free_word(max_codeword_length_coded);
+
+    int codeword_length_bit_count = get_bit_count(max_codeword_length);
+    Word* dict_entry_count_minus_one_coded = get_word_from_number(dict->size - 1, word_length);
+    write_word(writer, dict_entry_count_minus_one_coded);
+    free_word(dict_entry_count_minus_one_coded);
+
+    int i;
+    for (i = 0; i < dict->size; i++)
+    {
+        Word* word = dict->words[i];
+        Word* codeword = dict->codewords[i];
+
+        write_word(writer, word);
+
+        Word* codeword_size_coded = get_word_from_number(codeword->size, codeword_length_bit_count);
+        write_word(writer, codeword_size_coded);
+        free_word(codeword_size_coded);
+
+        write_word(writer, codeword);
+    }
+
+    if (writer->bits_filled > 0) // dump the rest
+    {
+        fwrite(&writer->latest_byte, 1, 1, writer->file);
+    }
 }
 
 /*
