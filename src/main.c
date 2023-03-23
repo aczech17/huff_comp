@@ -2,8 +2,6 @@
 #include <string.h>
 #include "compress.h"
 
-#include "word.h"
-
 int main(int argc, char** argv)
 {
     const char* usage = "comp [input filename] [output filename] [compress rate (-O1 | -O2 | -O3)]";
