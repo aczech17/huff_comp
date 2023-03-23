@@ -57,7 +57,7 @@ static int get_bit_count(int number)
     return count;
 }
 
-static void write_dictionary(const Dictionary* dict, Word_writer* writer)
+static void write_to_file(const Dictionary* dict, Word_writer* writer)
 {
     FILE* file = writer->file;
     const char* signature = "CRSK";
@@ -120,6 +120,7 @@ static void write_dictionary(const Dictionary* dict, Word_writer* writer)
     if (writer->bits_filled > 0) // dump the rest
     {
         fwrite(&writer->latest_byte, 1, 1, writer->file);
+    	writer->bits_filled = 0;
     }
 }
 
@@ -154,31 +155,12 @@ int compress_file(const char* input_filename, const char* output_filename, int w
         return 1;
     }
 
-
-    write_dictionary(dict, writer);
+    write_to_file(dict, writer);
     Word* word;
-
-    while (true)
-    {
-        word = get_word(reader);
-        if (word->size != 0)
-        {
-            Word* codeword = get_codeword(dict, word);
-            write_word(writer, codeword);
-            free_word(word);
-        }
-        else
-        {
-            if (writer->bits_filled > 0) // dump the rest
-                fwrite(&writer->latest_byte, 1, 1, writer->file);
-
-            free_word(word);
-            break;
-        }
-    }
 
     free_dictionary(dict);
     close_reader(reader);
     close_writer(writer);
     return 0;
 }
+
