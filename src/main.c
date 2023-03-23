@@ -41,8 +41,8 @@ int main(int argc, char** argv)
 
                 long size_in,size_out;
 
-                in = fopen(argv[1],'r');
-                out = fopen(argv[2],'r');
+                in = fopen(argv[1],"r");
+                out = fopen(argv[2],"r");
 
                 fseek(in,0L, SEEK_END);
                 fseek(out,0L, SEEK_END);
