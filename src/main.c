@@ -6,7 +6,7 @@
 int main(int argc, char** argv)
 {
     const char* usage = "comp [input filename] [output filename] [compress rate (-O1 | -O2 | -O3)]";
-    if (argc != 4)
+    if (argc != 6)
     {
         fprintf(stderr, "%s\n", usage);
         return 1;
@@ -34,9 +34,32 @@ int main(int argc, char** argv)
         case 2:
             fprintf(stderr, "Nie można stworzyć pliku.\n");
             break;
+        case 0:
+            if (strcmp(argv[4], "-v") == 0){
+                FILE *in;
+                FILE *out;
+
+                long size_in,size_out;
+
+                in = fopen(argv[1],'r');
+                out = fopen(argv[2],'r');
+
+                fseek(in,0L, SEEK_END);
+                fseek(out,0L, SEEK_END);
+
+                size_in = ftell(in);
+                size_out = ftell(out);
+
+                fclose(in);
+                fclose(out);
+
+                printf("Rozmiar pliku 1: %ld \n",size_in);
+                printf("Rozmiar pliku 2: %ld \n",size_out);
+            }
         default:
             break;
     }
 
+    
     return compress_result;
 }
