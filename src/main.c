@@ -6,7 +6,7 @@
 int main(int argc, char** argv)
 {
     const char* usage = "comp [input filename] [output filename] [compress rate (-O1 | -O2 | -O3)]";
-    if (argc != 6)
+    if (argc < 4 || argc > 6)
     {
         fprintf(stderr, "%s\n", usage);
         return 1;
@@ -35,7 +35,7 @@ int main(int argc, char** argv)
             fprintf(stderr, "Nie można stworzyć pliku.\n");
             break;
         case 0:
-            if (strcmp(argv[4], "-v") == 0){
+            if (argc >= 5 && strcmp(argv[4], "-v") == 0){
                 FILE *in;
                 FILE *out;
 
@@ -53,8 +53,13 @@ int main(int argc, char** argv)
                 fclose(in);
                 fclose(out);
 
-                printf("Rozmiar pliku 1: %ld \n",size_in);
-                printf("Rozmiar pliku 2: %ld \n",size_out);
+                double comp_percent;
+                comp_percent = (double)size_out / (double)size_in * 100.0;
+
+                printf("Rozmiar pliku wejściowego: %ld bajtów\n",size_in);
+                printf("Rozmiar pliku wyjściowego: %ld bajtów\n",size_out);
+                printf("Procent kompresji: %lf procent\n",comp_percent);
+
             }
         default:
             break;
