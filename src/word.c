@@ -1,8 +1,6 @@
 #include "word.h"
 #include <stdlib.h>
 
-#include <stdio.h> // DEBUG
-
 /*
     char* data;
     int size;

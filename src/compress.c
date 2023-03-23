@@ -42,31 +42,6 @@ static Dictionary* get_dictionary(Word_reader* reader)
     return dict;
 }
 
-static void print_word(const Word* word, FILE* file)
-{
-    int i;
-    for (i = 0; i < word->size; i++)
-    {
-        Bit bit = get_nth_bit(word, i);
-        fprintf(file, "%d", bit);
-    }
-    //printf("\n");
-}
-
-static void print_dictionary(const Dictionary* dict, FILE* file)
-{
-    //printf("%d\n", dict->size);
-    int i;
-    for (i = 0; i < dict->size; i++)
-    {
-        print_word(dict->words[i], file);
-        fprintf(file, " ");
-        print_word(dict->codewords[i], file);
-        fprintf(file, "\n");
-    }
-    fprintf(file, "\n");
-}
-
 static int get_bit_count(int number)
 {
     if (number == 0)
