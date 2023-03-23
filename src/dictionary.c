@@ -99,13 +99,20 @@ static void traverse_tree(Dictionary* dict, Tree_node* tree, Word* current_word)
 void fill_dictionary(Dictionary* dictionary, Tree_node* tree)
 {
     Word* current_word = new_word();
-    traverse_tree(dictionary, tree, current_word);
+    if (tree->left == NULL) // only one word
+    {
+        push_bit(current_word, 0);
+        Word* zero_word = copy_word(current_word);
+        push_codeword(dictionary, tree->word, zero_word);
+    }
+    else
+        traverse_tree(dictionary, tree, current_word);
     free_word(current_word);
 }
 
 int get_max_codeword_length(const Dictionary* dict)
 {
-    int max_length = 0;
+    int max_length = -1;
     int i;
     for (i = 0; i < dict->size; i++)
     {
