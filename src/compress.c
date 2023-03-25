@@ -63,6 +63,9 @@ static void write_dictionary(const Dictionary* dict, Word_writer* writer)
     const char* signature = "CRSK";
     fprintf(file, "%s", signature);
 
+    char padding = 0; // for now it's zero
+    fwrite(&padding, 1, 1, file);
+
     int word_length = dict->words[0]->size;
     Word* word_length_coded = new_word();
     switch (word_length)
@@ -162,6 +165,7 @@ int compress_file(const char* input_filename, const char* output_filename, int w
     write_dictionary(dict, writer);
     Word* word;
 
+    char padding;
     while (true)
     {
         word = get_word(reader);
@@ -174,12 +178,18 @@ int compress_file(const char* input_filename, const char* output_filename, int w
         else
         {
             if (writer->bits_filled > 0) // dump the rest
+            {
                 fwrite(&writer->latest_byte, 1, 1, writer->file);
+                padding = 8 - (char)writer->bits_filled;
+            }
 
             free_word(word);
             break;
         }
     }
+    
+    fseek(writer->file, 4, SEEK_SET);
+    fwrite(&padding, 1, 1, writer->file);
 
     free_dictionary(dict);
     close_reader(reader);
