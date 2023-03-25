@@ -165,7 +165,6 @@ int compress_file(const char* input_filename, const char* output_filename, int w
     write_dictionary(dict, writer);
     Word* word;
 
-    char padding;
     while (true)
     {
         word = get_word(reader);
@@ -180,7 +179,9 @@ int compress_file(const char* input_filename, const char* output_filename, int w
             if (writer->bits_filled > 0) // dump the rest
             {
                 fwrite(&writer->latest_byte, 1, 1, writer->file);
-                padding = 8 - (char)writer->bits_filled;
+                char padding = 8 - (char)writer->bits_filled;
+                fseek(writer->file, 4, SEEK_SET);
+                fwrite(&padding, 1, 1, writer->file);
             }
 
             free_word(word);
@@ -188,8 +189,7 @@ int compress_file(const char* input_filename, const char* output_filename, int w
         }
     }
     
-    fseek(writer->file, 4, SEEK_SET);
-    fwrite(&padding, 1, 1, writer->file);
+    
 
     free_dictionary(dict);
     close_reader(reader);
