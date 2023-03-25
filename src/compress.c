@@ -120,15 +120,6 @@ static void write_dictionary(const Dictionary* dict, Word_writer* writer)
 
         write_word(writer, codeword);
     }
-
-/*
-    if (writer->bits_filled > 0) // dump the rest
-    {
-        fwrite(&writer->latest_byte, 1, 1, writer->file);
-    	writer->bits_filled = 0;
-    }
-*/
-
 }
 
 /*
@@ -189,8 +180,6 @@ int compress_file(const char* input_filename, const char* output_filename, int w
         }
     }
     
-    
-
     free_dictionary(dict);
     close_reader(reader);
     close_writer(writer);
