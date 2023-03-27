@@ -4,7 +4,7 @@
 
 int main(int argc, char** argv)
 {
-    const char* usage = "comp [input filename] [output filename] [compress rate (-O1 | -O2 | -O3)]";
+    const char* usage = "comp [input filename] [output filename] [compress rate (-O1 | -O2 | -O3)] -v? -s?";
     if (argc < 4 || argc > 6)
     {
         fprintf(stderr, "%s\n", usage);

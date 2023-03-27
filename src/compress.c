@@ -82,6 +82,10 @@ static int get_bit_count(int number)
 static void write_dictionary(const Dictionary* dict, Word_writer* writer)
 {
     FILE* file = writer->file;
+
+    char zero = 0;
+    fwrite(&zero, 1, 1, file);
+
     const char* signature = "CRSK";
     fprintf(file, "%s", signature);
 
@@ -193,7 +197,7 @@ int compress_file(const char* input_filename, const char* output_filename, int w
             {
                 fwrite(&writer->latest_byte, 1, 1, writer->file);
                 char padding = 8 - (char)writer->bits_filled;
-                fseek(writer->file, 4, SEEK_SET);
+                fseek(writer->file, 5, SEEK_SET);
                 fwrite(&padding, 1, 1, writer->file);
             }
 
