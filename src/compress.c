@@ -39,6 +39,28 @@ static Dictionary* get_dictionary(Word_reader* reader)
     Dictionary* dict = new_dictionary();
     fill_dictionary(dict, root);
     free_tree(root);
+
+    int word_size = reader->word_size;
+    int i;
+    for (i = 0; i < dict->size; i++)
+    {
+        if (dict->words[i]->size != word_size)
+        {
+            // swap with the last word
+            // swap words[i] with word[dict->size - 1]
+            Word* tmp = dict->words[i];
+            dict->words[i] = dict->words[dict->size - 1];
+            dict->words[dict->size - 1] = tmp;
+
+            // swap codewords[i] with codewords[dict->size - 1]
+            tmp = dict->codewords[i];
+            dict->codewords[i] = dict->codewords[dict->size - 1];
+            dict->codewords[dict->size - 1] = tmp;
+
+            break;
+        }
+    }
+
     return dict;
 }
 
