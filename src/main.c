@@ -1,11 +1,24 @@
 #include <stdio.h>
 #include <string.h>
 #include "compress.h"
+#include <ctype.h>
+
+char get_xor(char* word)
+{
+    char key = 0;
+    int i;
+    for (i = 0; isalnum(word[i]); i++)
+    {
+        key = key ^ word[i];
+    }
+
+    return key;
+}
 
 int main(int argc, char** argv)
 {
-    const char* usage = "comp [input filename] [output filename] [compress rate (-O1 | -O2 | -O3)] -v? -s?";
-    if (argc < 4 || argc > 6)
+    const char* usage = "comp [input filename] [output filename] [compress rate (-O1 | -O2 | -O3)] -v? [-s ciph_word]?";
+    if (!(argc == 4 || argc == 5 || argc == 7))
     {
         fprintf(stderr, "%s\n", usage);
         return 1;
@@ -60,6 +73,39 @@ int main(int argc, char** argv)
                 printf("Procent kompresji: %lf procent\n",comp_percent);
 
             }
+
+            char* cipher_word = NULL;
+            if (argc >= 5 && strcmp(argv[4], "-s") == 0)
+            {
+                cipher_word = argv[5];
+            }
+            else if (argc >= 7 && strcmp(argv[5], "-s") == 0)
+            {
+                cipher_word = argv[6];
+            }
+
+            if (cipher_word)
+            {
+                char key = get_xor(cipher_word);
+
+                FILE* file = fopen(argv[2], "rb+");
+
+                char cipher_sign = 0xFF;
+                fwrite(&cipher_sign, 1, 1, file);
+
+
+                char byte;
+                fseek(file, 1, SEEK_SET); // ignore the ff signature
+                while (fread(&byte, 1, 1, file))
+                {
+                    byte = byte ^ key;
+                    fseek(file, -1, SEEK_CUR);
+                    fwrite(&byte, 1, 1, file);
+                }
+
+                fclose(file);
+            }
+
         default:
             break;
     }
