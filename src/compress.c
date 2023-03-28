@@ -64,7 +64,7 @@ static Dictionary* get_dictionary(Word_reader* reader)
     return dict;
 }
 
-static int get_bit_count(int number)
+int get_bit_count(int number)
 {
     if (number == 0)
         return 1;
@@ -91,6 +91,9 @@ static void write_dictionary(const Dictionary* dict, Word_writer* writer)
 
     char padding = 0; // for now it's zero
     fwrite(&padding, 1, 1, file);
+
+    char last_word_length = dict->words[dict->size - 1]->size; // for now it's zero
+    fwrite(&last_word_length, 1, 1, file);
 
     int word_length = dict->words[0]->size;
     Word* word_length_coded = new_word();

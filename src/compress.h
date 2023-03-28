@@ -10,5 +10,6 @@
     555 - other
 */
 int compress_file(const char* input_filename, const char* output_filename, int word_size);
+int get_bit_count(int number);
 
 #endif // HUFF_COMP_COMPRESS

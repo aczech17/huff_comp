@@ -3,6 +3,8 @@
 #include "compress.h"
 #include <ctype.h>
 
+#include "word.h"
+
 char get_xor(char* word)
 {
     char key = 0;

@@ -128,3 +128,17 @@ Word* copy_word(Word* word)
 
     return copy;
 }
+
+int get_number_from_word(const Word* word)
+{
+    int number = 0;
+    int i;
+    for (i = 0; i < word->size; i++)
+    {
+        Bit bit = get_nth_bit(word, i);
+        number = number << 1;
+        number = number | bit;
+    }
+
+    return number;
+}
