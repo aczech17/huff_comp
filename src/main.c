@@ -63,7 +63,7 @@ int main(int argc, char** argv)
             fprintf(stderr, "Nie można otworzyć pliku.\n");
             break;
         case 2:
-            fprintf(stderr, "Nie można stworzyć pliku.\n");
+            fprintf(stderr, "Nie można stworzyć pliku %s.\n", argv[2]);
             break;
         case 0:
             if (argc >= 5 && strcmp(argv[4], "-v") == 0){
