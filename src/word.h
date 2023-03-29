@@ -9,12 +9,12 @@ typedef struct Word
 {
     char* data;
     int size;
-    int capacity;
+    int bytes_allocated;
 }Word;
 
 Word* new_word();
 int push_bit(Word* word, Bit bit);
-int pop_bit(Word* word);
+void pop_bit(Word* word);
 Bit get_nth_bit(const Word* word, int index);
 void free_word(Word* word);
 bool equals(const Word*, const Word*);

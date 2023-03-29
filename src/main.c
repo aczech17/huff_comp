@@ -4,6 +4,18 @@
 #include <ctype.h>
 
 #include "word.h"
+#include "decompress.h"
+
+void print_word3(const Word* word)
+{
+    int i;
+    for (i = 0; i < word->size; i++)
+    {
+        Bit bit = get_nth_bit(word, i);
+        printf("%d", bit);
+    }
+    printf("\n");
+}
 
 char get_xor(char* word)
 {
@@ -19,7 +31,7 @@ char get_xor(char* word)
 
 int main(int argc, char** argv)
 {
-    const char* usage = "comp [input filename] [output filename] [compress rate (-O1 | -O2 | -O3)] -v? [-s ciph_word]?";
+    const char* usage = "comp [input filename] [output filename] -d? [compress rate (-O1 | -O2 | -O3)] -v? [-s ciph_word]?";
     if (!(argc == 4 || argc == 5 || argc == 7))
     {
         fprintf(stderr, "%s\n", usage);
@@ -33,14 +45,19 @@ int main(int argc, char** argv)
         word_size = 12;
     else if (strcmp(argv[3], "-O3") == 0)
         word_size = 16;
-    else
+    /*else
     {
         fprintf(stderr, "Bad argument\n");
         return 2;
-    }
+    }*/
 
-    int compress_result = compress_file(argv[1], argv[2], word_size);
-    switch (compress_result)
+    int result;
+    if (strcmp(argv[3], "-d") == 0)
+        result = decompress_file(argv[1], argv[2]);
+    else
+        result = compress_file(argv[1], argv[2], word_size);
+
+    switch (result)
     {
         case 1:
             fprintf(stderr, "Nie można otworzyć pliku.\n");
@@ -113,5 +130,5 @@ int main(int argc, char** argv)
     }
 
     
-    return compress_result;
+    return result;
 }

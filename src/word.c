@@ -1,6 +1,8 @@
 #include "word.h"
 #include <stdlib.h>
 
+#include <stdio.h>
+
 /*
     char* data;
     int size;
@@ -9,20 +11,20 @@
 
 static int resize(Word* word)
 {
-    int new_capacity = 2 * word->capacity;
-    char* new_data = realloc(word->data, new_capacity);
+    int new_bytes_allocated = 2 * word->bytes_allocated;
+    char* new_data = realloc(word->data, new_bytes_allocated);
     if (new_data == NULL)
     {
         free(word->data);
         return 1;
     }
 
-    int i;
-    for (i = word->capacity; i < new_capacity; i++)
-        new_data[i] = 0;
+    int byte_index;
+    for (byte_index = word->bytes_allocated; byte_index < new_bytes_allocated; byte_index++)
+        word->data[byte_index] = 0;
 
     word->data = new_data;
-    word->capacity = new_capacity;
+    word->bytes_allocated = new_bytes_allocated;
 
     return 0;
 }
@@ -35,11 +37,11 @@ Word* new_word()
         return NULL;
 
     word->size = 0;
-    word->capacity = 2;
+    word->bytes_allocated = 2;
 
-    word->data = malloc(word->capacity);
+    word->data = malloc(word->bytes_allocated);
     int i;
-    for (i = 0; i < word->capacity; i++)
+    for (i = 0; i < word->bytes_allocated; i++)
         word->data[i] = 0;
 
     return word;
@@ -60,7 +62,7 @@ Word* get_word_from_number(int number, int length)
 
 int push_bit(Word* word, Bit bit)
 {
-    if (word->size + 1 > 8 * word->capacity)
+    if (word->size + 1 > 8 * word->bytes_allocated)
     {
         // resize (optionally fail)
         if (resize(word) == 1)
@@ -76,10 +78,18 @@ int push_bit(Word* word, Bit bit)
     return 0;
 }
 
-int pop_bit(Word* word)
+void pop_bit(Word* word)
 {
-    if (word->size > 0)
-        word->size--;}
+    if (word->size <= 0)
+        return;
+
+    int byte_index = (word->size - 1) / 8;
+    int bit_index = (word->size - 1) % 8;
+
+    word->data[byte_index] &= (~(1 << (7 - bit_index)));
+
+    word->size--;
+}
 
 Bit get_nth_bit(const Word* word, int index)
 {
@@ -133,6 +143,7 @@ int get_number_from_word(const Word* word)
 {
     int number = 0;
     int i;
+
     for (i = 0; i < word->size; i++)
     {
         Bit bit = get_nth_bit(word, i);

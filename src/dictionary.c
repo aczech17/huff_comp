@@ -8,6 +8,19 @@
     int capacity;
 */
 
+#include <stdio.h>
+
+void print_word2(const Word* word)
+{
+    int i;
+    for (i = 0; i < word->size; i++)
+    {
+        Bit bit = get_nth_bit(word, i);
+        printf("%d", bit);
+    }
+    printf("\n");
+}
+
 Dictionary* new_dictionary()
 {
     Dictionary* dict = malloc(sizeof(Dictionary));
@@ -71,19 +84,22 @@ int push_codeword(Dictionary* dict, Word* word, Word* codeword)
     dict->codewords[dict->size] = codeword;
 
     dict->size++;
+
+    return 0;
 }
 
 static void traverse_tree(Dictionary* dict, Tree_node* tree, Word* current_word)
 {
+    print_word2(current_word);
     if (tree->left)
     {
         push_bit(current_word, 0);
+        puts("LEFT");
         traverse_tree(dict, tree->left, current_word);
-
-
         pop_bit(current_word);
-        push_bit(current_word, 1);
 
+        push_bit(current_word, 1);
+        puts("RIGHT");
         traverse_tree(dict, tree->right, current_word);
         pop_bit(current_word);
     }
@@ -91,9 +107,12 @@ static void traverse_tree(Dictionary* dict, Tree_node* tree, Word* current_word)
     {
         Word* word = tree->word;
         Word* codeword = copy_word(current_word);
+        //print_word2(word);
+        //print_word2(codeword);
+
         push_codeword(dict, word, codeword);
     }
-    
+    puts("UP");
 }
 
 void fill_dictionary(Dictionary* dictionary, Tree_node* tree)
