@@ -42,28 +42,6 @@ static Word* get_word_from_file(Decompress_reader* reader, int length)
     return word;
 }
 
-static bool word_match(Decompress_reader* reader, const Word* word)
-{
-    Word* word_from_file = get_word_from_file(reader, word->size);
-    reader->bit_number -= word->size;
-    return equals(word_from_file, word);
-}
-
-bool check_dict(Dictionary* dict)
-{
-    int i, j;
-    for (i = 0; i < dict->size - 1; i++)
-    {
-        for (j = i + 1; j < dict->size; j++)
-        {
-            if (equals(dict->codewords[i], dict->codewords[j]))
-                return false;
-        }
-    }
-
-    return true;
-}
-
 int decompress_file(const char* input_filename, const char* output_filename)
 {
     FILE* input = fopen(input_filename, "rb");
@@ -143,9 +121,6 @@ int decompress_file(const char* input_filename, const char* output_filename)
 
         push_codeword(dict, word, codeword);
     }
-
-    if (!check_dict(dict))
-        puts("coś spierdoliliśmy");
 
     Word_writer* writer = create_file(output_filename);
     while (reader->bit_number < input_length - padding)

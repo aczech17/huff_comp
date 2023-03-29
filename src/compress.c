@@ -5,47 +5,6 @@
 #include "word_writer.h"
 #include "word.h"
 
-void print_word(const Word* word)
-{
-    int i;
-    for (i = 0; i < word->size; i++)
-    {
-        Bit bit = get_nth_bit(word, i);
-        printf("%d", bit);
-    }
-    printf("\n");
-}
-
-void print_node_array(const Node_array* array)
-{
-    int i;
-    for (i = 0; i < array->size; i++)
-    {
-        if (array->arr[i]->word)
-        {
-            Word* word = array->arr[i]->word;
-            printf("%c", get_number_from_word(word));
-        }
-        printf("%d ", array->arr[i]->frequency);
-    }
-    puts("");
-}
-
-bool check_dict2(Dictionary* dict)
-{
-    int i, j;
-    for (i = 0; i < dict->size - 1; i++)
-    {
-        for (j = i + 1; j < dict->size; j++)
-        {
-            if (equals(dict->codewords[i], dict->codewords[j]))
-                return false;
-        }
-    }
-
-    return true;
-}
-
 static Dictionary* get_dictionary(Word_reader* reader)
 {
     Node_array* node_array = new_node_array();
@@ -70,7 +29,6 @@ static Dictionary* get_dictionary(Word_reader* reader)
     {
         merge_2_nodes(node_array);
         sort_array(node_array);
-        //print_node_array(node_array);
     }
 
 
@@ -210,9 +168,6 @@ int compress_file(const char* input_filename, const char* output_filename, int w
 
     Dictionary* dict = get_dictionary(reader);
     close_reader(reader);
-
-    if(!check_dict2(dict))
-        puts("coś spierdoliliśmy kurwa mać");
 
     Word_writer* writer = create_file(output_filename);
     if (writer == NULL)
