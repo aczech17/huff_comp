@@ -60,8 +60,7 @@ int decompress_file(const char* input_filename, const char* output_filename)
     int last_word_size = fgetc(input);
     
     fseek(input, 7, SEEK_SET);
-    char byte = (char)fgetc(input);
-
+    int byte = fgetc(input);
 
     int word_size;
     switch (byte >> 6)
