@@ -6,17 +6,6 @@
 #include "word.h"
 #include "decompress.h"
 
-void print_word3(const Word* word)
-{
-    int i;
-    for (i = 0; i < word->size; i++)
-    {
-        Bit bit = get_nth_bit(word, i);
-        printf("%d", bit);
-    }
-    printf("\n");
-}
-
 char get_xor(char* word)
 {
     char key = 0;

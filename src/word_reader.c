@@ -2,6 +2,17 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#include <stdio.h>
+void print_word2(const Word* word)
+{
+    int i;
+    for (i = 0; i < word->size; i++)
+    {
+        Bit bit = get_nth_bit(word, i);
+        printf("%d", bit);
+    }
+}
+
 Word_reader* open_file(const char* filename, int word_size)
 {
     FILE* file = fopen(filename, "rb");
@@ -20,14 +31,23 @@ Word_reader* open_file(const char* filename, int word_size)
 
 static size_t load_next_byte(Word_reader* word_reader)
 {
-    return fread(&word_reader->latest_byte, 1, 1, word_reader->file);
+    int bytes_read = fread(&word_reader->latest_byte, 1, 1, word_reader->file);
+
+    //if (bytes_read == 0)
+        //puts("EOF");
+
+    return bytes_read;
 }
 
 static void push_bits(Word* word, char byte, int from, int to)
 {
     int i;
-    for (i = to; i >= from; i--)
-        push_bit(word, byte >> i);
+    for (i = from; i <= to; i++)
+    {
+        Bit bit = (byte >> (7 - i)) % 2 == 0 ? 0 : 1;
+        //printf("dodajemy bit %d\n", bit);
+        push_bit(word, bit);
+    }
 }
 
 Word* get_word(Word_reader* word_reader)
@@ -50,15 +70,15 @@ Word* get_word(Word_reader* word_reader)
     {
         if (word_reader->in_half_byte)
         {
-            push_bits(word, word_reader->latest_byte, 0, 3);
+            push_bits(word, word_reader->latest_byte, 4, 7);
 
             if (load_next_byte(word_reader) == 0)
             {
                 word_reader->in_half_byte = false; // is it necessary?
                 return word;
             }
-
             push_bits(word, word_reader->latest_byte, 0, 7);
+
             word_reader->in_half_byte = false;
         }
         else
@@ -71,7 +91,7 @@ Word* get_word(Word_reader* word_reader)
             if (load_next_byte(word_reader) == 0)
                 return word;
 
-            push_bits(word, word_reader->latest_byte, 4, 7);
+            push_bits(word, word_reader->latest_byte, 0, 3);
             word_reader->in_half_byte = true;
         }
     }
@@ -83,7 +103,6 @@ Word* get_word(Word_reader* word_reader)
         push_bits(word, word_reader->latest_byte, 0, 7);
     }
     
-
     return word;
 }
 

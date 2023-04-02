@@ -169,6 +169,17 @@ int compress_file(const char* input_filename, const char* output_filename, int w
     Dictionary* dict = get_dictionary(reader);
     close_reader(reader);
 
+/*
+    int i;
+    for (i = 0; i < dict->size; i++)
+    {
+        print_word(dict->words[i]);
+        printf(" - ");
+        print_word(dict->codewords[i]);
+        printf("\n");
+    }
+    */
+
     Word_writer* writer = create_file(output_filename);
     if (writer == NULL)
     {
