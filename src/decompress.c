@@ -28,6 +28,12 @@ static Decompress_reader* new_decompress_reader(const char* input_filename)
     return reader;
 }
 
+static void close_decompress_reader(Decompress_reader* reader)
+{
+    fclose(reader->file);
+    free(reader);
+}
+
 static Word* get_word_from_file(Decompress_reader* reader, int length)
 {
     Word* word = new_word();
@@ -124,7 +130,6 @@ int decompress_file(const char* input_filename, const char* output_filename)
     Word_writer* writer = create_file(output_filename);
     while (reader->bit_number < input_length - padding)
     {
-        //printf("%d %d\n", reader->bit_number, input_length - padding);
         for (i = 0; i < dict->size; i++)
         {
             Word* word_from_file = get_word_from_file(reader, dict->codewords[i]->size);
@@ -132,15 +137,13 @@ int decompress_file(const char* input_filename, const char* output_filename)
 
             if (equals(word_from_file, dict->codewords[i]))
             {
-                //printf("%d ", reader->bit_number);
                 write_word(writer, dict->words[i]);
                 reader->bit_number += dict->codewords[i]->size;
-                //printf("%d ", reader->bit_number);
+                free_word(word_from_file);
                 break;
             }
-            //puts("nie znaleźliśmy codeworda");
+            free_word(word_from_file);
         }
-        //printf("%d\n", reader->bit_number);
     }
 
     if (writer->bits_filled > 0) // dump the rest
@@ -150,6 +153,7 @@ int decompress_file(const char* input_filename, const char* output_filename)
 
     close_writer(writer);
     free_dictionary(dict);
+    close_decompress_reader(reader);
 
     return 0;
 }
