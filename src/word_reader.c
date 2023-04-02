@@ -2,17 +2,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#include <stdio.h>
-void print_word2(const Word* word)
-{
-    int i;
-    for (i = 0; i < word->size; i++)
-    {
-        Bit bit = get_nth_bit(word, i);
-        printf("%d", bit);
-    }
-}
-
 Word_reader* open_file(const char* filename, int word_size)
 {
     FILE* file = fopen(filename, "rb");
@@ -32,10 +21,6 @@ Word_reader* open_file(const char* filename, int word_size)
 static size_t load_next_byte(Word_reader* word_reader)
 {
     int bytes_read = fread(&word_reader->latest_byte, 1, 1, word_reader->file);
-
-    //if (bytes_read == 0)
-        //puts("EOF");
-
     return bytes_read;
 }
 
@@ -45,7 +30,6 @@ static void push_bits(Word* word, char byte, int from, int to)
     for (i = from; i <= to; i++)
     {
         Bit bit = (byte >> (7 - i)) % 2 == 0 ? 0 : 1;
-        //printf("dodajemy bit %d\n", bit);
         push_bit(word, bit);
     }
 }
