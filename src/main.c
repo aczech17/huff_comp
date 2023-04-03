@@ -20,26 +20,23 @@ char get_xor(const char* word)
     return key;
 }
 
-void xor_file(FILE* file, const char* cipher_word, bool encrypt)
+void xor_file(FILE* input, FILE* output, const char* cipher_word, bool encrypt)
 {
     char key = get_xor(cipher_word);
 
     if (encrypt)
     {
         char cipher_sign = 0xFF;
-        fwrite(&cipher_sign, 1, 1, file);
+        fwrite(&cipher_sign, 1, 1, output);
     }
 
     char byte;
     //fseek(file, 1, SEEK_SET); // ignore the ff signature
-    while (fread(&byte, 1, 1, file))
+    while ((byte = fgetc(input)) != EOF)
     {
         byte = byte ^ key;
-        fseek(file, -1, SEEK_CUR);
-        fwrite(&byte, 1, 1, file);
+        fwrite(&byte, 1, 1, output);
     }
-
-    fclose(file);
 }
 
 typedef struct 
@@ -68,6 +65,11 @@ int main(int argc, char** argv)
     
     config.input_filename = argv[1];
     config.output_filename = argv[2];
+    if (strcmp(config.output_filename, "temp.xor") == 0)
+    {
+        fprintf(stderr, "Zarezerwowana nazwa pliku.\n");
+        return 410;
+    }
     if (argc >= 4 && strcmp(argv[3], "-d") == 0)
         config.decompress = true;
     else
@@ -136,22 +138,24 @@ int main(int argc, char** argv)
     if (config.decompress)
     {
         FILE* input = fopen(config.input_filename, "rb");
+        FILE* tmp = fopen("temp.xor", "wb");
         int first_byte = fgetc(input);
 
         if (first_byte == 0xFF)
-            xor_file(input, config.password, false);
+            xor_file(input, tmp, config.password, false);
         fclose(input);
+        fclose(tmp);
 
-        result = decompress_file(argv[1], argv[2]);
+        result = decompress_file("temp.xor", config.output_filename);
     }
     else // compress
     {
-        result = compress_file(config.input_filename, config.output_filename, config.word_size);
+        result = compress_file(config.input_filename, "temp.xor", config.word_size);
         if(result == 0 && config.encrypt)
         {
-            FILE* file = fopen(config.output_filename, "rb");
-            xor_file(file, config.password, true);
-            fclose(file);
+            FILE* input = fopen("temp.xor", "rb");
+            FILE* output = fopen(config.output_filename, "wb");
+            xor_file(input, output, config.password, true);
         }
     }
 
