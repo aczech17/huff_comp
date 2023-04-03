@@ -7,3 +7,12 @@ $(target):	$(source)
 clean:
 	rm -f $(target)
 
+test1:	$(target)
+	./comp example/papa.jpg papa.comp -O1 -v
+	./comp papa.comp papa.jpg -d
+	@cmp --silent example/papa.jpg papa.jpg && echo 'Są identyczne :)' || echo 'ojojoj :/'
+
+test2: $(target)
+	./comp example/pan-tadeusz.txt tadek.comp -O2 -v
+	./comp tadek.comp tadek.txt -d
+	@cmp --silent example/pan-tadeusz.txt tadek.txt && echo 'Są identyczne :)' || echo 'ojojoj :/'
