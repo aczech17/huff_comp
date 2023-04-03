@@ -122,7 +122,15 @@ int main(int argc, char** argv)
         }
     }
 
-// papa.comp papa.jpg -d
+    FILE* in = fopen(config.input_filename, "rb");
+    fseek(in, 0, SEEK_END);
+    if (ftell(in) == 0)
+    {
+        fclose(in);
+        fprintf(stderr, "The file is empty.\n");
+        return 255;
+    }
+    fclose(in);
 
     int result;
     if (config.decompress)
