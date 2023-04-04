@@ -15,6 +15,6 @@ test1:	$(target)
 	@cmp --silent example/papa.jpg papa.jpg && echo 'Są identyczne :)' || echo 'ojojoj :/'
 
 test2: $(target)
-	./comp example/pan-tadeusz.txt tadek.comp -O2 -v
-	./comp tadek.comp tadek.txt -d
-	@cmp --silent example/pan-tadeusz.txt tadek.txt && echo 'Są identyczne :)' || echo 'ojojoj :/'
+	./comp example/tadeusz.txt tadek.comp -O2 -v ifiwerearichman
+	./comp tadek.comp tadek.txt -d ifiwerearichman
+	@cmp --silent example/tadeusz.txt tadek.txt && echo 'Są identyczne :)' || echo 'ojojoj :/'
