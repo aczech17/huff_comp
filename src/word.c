@@ -1,8 +1,6 @@
 #include "word.h"
 #include <stdlib.h>
 
-#include <stdio.h>
-
 /*
     char* data;
     int size;
@@ -18,12 +16,12 @@ static int resize(Word* word)
         free(word->data);
         return 1;
     }
+    word->data = new_data;
 
     int byte_index;
     for (byte_index = word->bytes_allocated; byte_index < new_bytes_allocated; byte_index++)
         word->data[byte_index] = 0;
 
-    word->data = new_data;
     word->bytes_allocated = new_bytes_allocated;
 
     return 0;
