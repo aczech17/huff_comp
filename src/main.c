@@ -194,7 +194,7 @@ int main(int argc, char** argv)
             fprintf(stderr, "Nie można stworzyć pliku %s.\n", argv[2]);
             break;
         case 0:
-            if (config.verbose)
+            if (config.action == compress && config.verbose)
             {
                 long size_in = get_file_size(config.input_filename);
                 long size_out = get_file_size(config.output_filename);
