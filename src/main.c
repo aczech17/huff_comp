@@ -95,7 +95,7 @@ int main(int argc, char** argv)
     const char* usage = "comp [input filename] [output filename] (-d | [compress rate (-O1 | -O2 | -O3)]) -v? encrypt_word?";
     /*                   0    1                2                 3                                         4  (4 | 5)   */
     
-    if (argc < 5)
+    if (argc < 4)
     {
         fprintf(stderr, "%s\n", usage);
         return 1944;
@@ -128,7 +128,7 @@ int main(int argc, char** argv)
             config.word_size = 16;
     }
 
-    if (strcmp(argv[4], "-v") == 0)
+    if (argc >= 5 && strcmp(argv[4], "-v") == 0)
         config.verbose = true;
     else
         config.verbose = false;
@@ -211,6 +211,6 @@ int main(int argc, char** argv)
     }
     
 
-    // remove temp file
+    remove(tmpfile_name);
     return result;
 }
