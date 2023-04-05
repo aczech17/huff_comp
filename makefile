@@ -14,7 +14,13 @@ test1:	$(target)
 	./comp papa.comp papa.jpg -d
 	@cmp --silent example/papa.jpg papa.jpg && echo 'Są identyczne :)' || echo 'ojojoj :/'
 
-test2: $(target)
+test2:	$(target)
 	./comp example/tadeusz.txt tadek.comp -O2 -v ifiwerearichman
 	./comp tadek.comp tadek.txt -d ifiwerearichman
 	@cmp --silent example/tadeusz.txt tadek.txt && echo 'Są identyczne :)' || echo 'ojojoj :/'
+
+test_leak:	$(target)
+	valgrind -s --leak-check=full --show-leak-kinds=all ./comp example/tadeusz.txt tadeusz.comp -O1 ifiwerearichman
+	valgrind -s --leak-check=full --show-leak-kinds=all ./comp tadeusz.comp tadeusz.txt -d ifiwerearichman
+	rm tadeusz.comp
+	rm tadeusz.txt
