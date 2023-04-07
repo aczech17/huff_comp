@@ -34,7 +34,12 @@ int main(int argc, char** argv)
     {
         if (file_is_encrypted(config.input_filename))
         {
-            decrypt_file(config.input_filename, config.tmpfile_name, config.password);
+            bool decrypt_correct = decrypt_file(config.input_filename, config.tmpfile_name, config.password);
+            if (!decrypt_correct)
+            {
+                fprintf(stderr, "Decryption incorrect.\n");
+                return 3;
+            }
             result = decompress_file(config.tmpfile_name, config.output_filename);
         }
         else

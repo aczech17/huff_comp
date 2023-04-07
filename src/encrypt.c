@@ -1,6 +1,7 @@
 #include "encrypt.h"
 #include <stdio.h>
 #include <ctype.h>
+#include <string.h>
 
 typedef enum
 {
@@ -72,7 +73,17 @@ void encrypt_file(const char* input_filename, const char* output_filename, const
     xor_file(input_filename, output_filename, encrypt_word, encrypt);
 }
 
-void decrypt_file(const char* input_filename, const char* output_filename, const char* encrypt_word)
+bool decrypt_file(const char* input_filename, const char* output_filename, const char* encrypt_word)
 {
     xor_file(input_filename, output_filename, encrypt_word, decrypt);
+    FILE* output = fopen(output_filename, "rb");
+    fseek(output, 1, SEEK_SET);
+
+    char buf[5];
+    fread(buf, 1, 4, output);
+    buf[4] = 0;
+
+    fclose(output);
+
+    return (strcmp(buf, "CRSK") == 0);
 }
