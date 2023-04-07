@@ -22,5 +22,6 @@ test2:	$(target)
 test_leak:	$(target)
 	valgrind -s --leak-check=full --show-leak-kinds=all ./comp example/tadeusz.txt tadeusz.comp -O1 ifiwerearichman
 	valgrind -s --leak-check=full --show-leak-kinds=all ./comp tadeusz.comp tadeusz.txt -d ifiwerearichman
-	rm tadeusz.comp
-	rm tadeusz.txt
+
+test_all:	test_leak
+	@cmp --silent example/tadeusz.txt tadeusz.txt && echo 'Są identyczne :)' || echo 'ojojoj :/'
