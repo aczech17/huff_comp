@@ -9,7 +9,7 @@ int main(int argc, char** argv)
     const char* usage = "comp [input filename] [output filename] (-d | [compress rate (-O1 | -O2 | -O3)]) -v? encrypt_word?";
     /*                   0    1                2                 3                                         4  (4 | 5)   */
 
-    if (argc < 4)
+    if (argc < 4 || argc > 6 )
     {
         fprintf(stderr, "%s\n", usage);
         return 1944;
